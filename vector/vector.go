@@ -7,8 +7,6 @@ package vector
 // seen on the SliceTricks GitHub page.
 type Vector[T any] struct {
 	__array []T
-	Length  int
-	Cap     int
 }
 
 // Creates a new, empty Vector.
@@ -17,8 +15,6 @@ type Vector[T any] struct {
 func NewVector[T any]() Vector[T] {
 	this := Vector[T]{}
 	this.__array = make([]T, 0)
-	this.Length = 0
-	this.Cap = 0
 	return this
 }
 
@@ -28,9 +24,15 @@ func NewVector[T any]() Vector[T] {
 func NewVectorFrom[T any](args ...T) Vector[T] {
 	this := Vector[T]{}
 	this.__array = append(this.__array, args...)
-	this.Length = len(this.__array)
-	this.Cap = cap(this.__array)
 	return this
+}
+
+func (this *Vector[T]) Length() int {
+	return len(this.__array)
+}
+
+func (this *Vector[T]) Cap() int {
+	return cap(this.__array)
 }
 
 // Returns the element located at the specified index.
@@ -54,7 +56,6 @@ func (this *Vector[T]) Set(index int, value T) {
 //  Returns: None
 func (this *Vector[T]) Push(element T) {
 	this.__array = append(this.__array, element)
-	this.Length += 1
 }
 
 // Pops an element from the back of the Vector.
@@ -63,7 +64,6 @@ func (this *Vector[T]) Push(element T) {
 func (this *Vector[T]) PopBack() T {
 	element := this.__array[len(this.__array)-1]
 	this.__array = this.__array[:len(this.__array)-1]
-	this.Length -= 1
 	return element
 }
 
@@ -73,9 +73,7 @@ func (this *Vector[T]) PopAt(index int) T {
 
 	// this.__array[len(this.__array)-1] := nil
 	// above can only work with garbage collected types.
-
 	this.__array = this.__array[:len(this.__array)-1]
-	this.Length -= 1
 	return value
 }
 
@@ -86,8 +84,6 @@ func (this *Vector[T]) PopAt(index int) T {
 func (this *Vector[T]) Slice(start int, end int) *Vector[T] {
 	slice := Vector[T]{}
 	slice.__array = this.__array[start:end]
-	slice.Length = len(slice.__array)
-	slice.Cap = cap(slice.__array)
 	return &slice
 }
 

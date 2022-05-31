@@ -19,7 +19,7 @@ func TestPush(t *testing.T) {
 	expected := 5
 	myVec := NewVectorFrom(1, 2, 3, 4)
 	myVec.Push(5)
-	if myVec.Length != expected {
+	if myVec.Length() != expected {
 		t.Log("(Vector).Push Method: FAIL")
 		t.Log("Expected: myVec.Length == 5\nGot: myVec.Length == 4\n")
 
@@ -31,7 +31,7 @@ func TestPopBack(t *testing.T) {
 	expected := 3
 	myVec := NewVectorFrom(1, 2, 3, 4)
 	myVec.PopBack()
-	if myVec.Length != expected {
+	if myVec.Length() != expected {
 		t.Log("Expected: myVec.Length == 3\nGot: myVec.Length == 4\n")
 		t.Log("(Vector).PopBack Method: FAIL")
 		t.Fail()
@@ -74,7 +74,7 @@ func TestPopAt(t *testing.T) {
 	myVec := NewVectorFrom(1, 2, 3, 4, 5, 6)
 	myVec.PopAt(2) // should remove the third element.
 	areEqual := true
-	myVec.For(0, myVec.Length, 1, func(i int, v int) {
+	myVec.For(0, myVec.Length(), 1, func(i int, v int) {
 		v2 := expected[i]
 		if v2 != v {
 			areEqual = false
@@ -104,10 +104,12 @@ func TestPopAt(t *testing.T) {
 		&person{"Mimi", 45},
 	)
 
-	_ = peopleVec.PopAt(peopleVec.Length - 1)
+	_ = peopleVec.PopAt(peopleVec.Length() - 2)
+	_ = peopleVec.PopAt(peopleVec.Length() - 2)
+	_ = peopleVec.PopAt(peopleVec.Length() - 2)
 
 	areEqual = true
-	peopleVec.For(0, peopleVec.Length, 1, func(i int, v *person) {
+	peopleVec.For(0, peopleVec.Length(), 1, func(i int, v *person) {
 		v2 := peopleExpected[i]
 		if v.name != v2.name || v.age != v2.age {
 			areEqual = false
