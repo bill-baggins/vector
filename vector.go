@@ -1,5 +1,5 @@
 // The Vector Library. Contains a single, generic struct: Vector[T].
-package main
+package vector
 
 // Vector is a struct that acts as a wrapper for the slice.
 // It contians a lot of helper methods for manipulating the slice.
