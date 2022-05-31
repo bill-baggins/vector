@@ -14,23 +14,23 @@ type Vector[T any] struct {
 // Creates a new, empty Vector.
 // 	Params: None
 // 	Returns: Vector[T]
-func NewVector[T any]() Vector[T] {
+func NewVector[T any]() *Vector[T] {
 	this := Vector[T]{}
 	this.__array = make([]T, 0)
 	this.Length = 0
 	this.Cap = 0
-	return this
+	return &this
 }
 
 // Creates a new Vector filled with elements provided in the args parameter.
 // 	Params: args ...T
 // 	Returns: Vector[T]
-func NewVectorFrom[T any](args ...T) Vector[T] {
+func NewVectorFrom[T any](args ...T) *Vector[T] {
 	this := Vector[T]{}
 	this.__array = append(this.__array, args...)
 	this.Length = len(this.__array)
 	this.Cap = cap(this.__array)
-	return this
+	return &this
 }
 
 // Returns the element located at the specified index.
@@ -67,6 +67,50 @@ func (this *Vector[T]) PopBack() T {
 	return element
 }
 
+func (this *Vector[T]) PopAt(index int) T {
+	value := this.Get(index)
+	copy(this.__array[index:], this.__array[index+1:])
+
+	// this.__array[len(this.__array)-1] := nil
+	// above can only work with garbage collected types.
+
+	this.__array = this.__array[:len(this.__array)-1]
+	this.Length -= 1
+	return value
+}
+
+// Takes a slice of the Vector.
+//  Params: start int
+//          end int
+//  Returns: Vector[T]
+func (this *Vector[T]) Slice(start int, end int) *Vector[T] {
+	slice := Vector[T]{}
+	slice.__array = this.__array[start:end]
+	slice.Length = len(slice.__array)
+	slice.Cap = cap(slice.__array)
+	return &slice
+}
+
+/*
+ **           *******       *******     *******    **   ****     **     ********
+/**          **/ ////**     **/////**   /**////**  /**  /**/**   /**    **//////**
+/**         **     //**   **     //**  /**   /**  /**  /**/ /**  /**   **      //
+/**        /**      /**  /**      /**  /*******   /**  /** //** /**  /**
+/**        /**      /**  /**      /**  /**/ ///    /**  /**  //**/**  /**    *****
+/**        //**     **   //**     **   /**        /**  /**   //****  //**  ////**
+/********   //*******     //*******    /**        /**  /**    //***   //********
+////////     ///////       ///////     //         //   //      ///     ////////
+
+ ********   **     **   ****     **     ******    **********   **     *******     ****     **    ********
+/**/ ////   /**    /**  /**/**   /**    **////**  /////**///   /**    **/////**   /**/**   /**   **//////
+/**        /**    /**  /**/ /**  /**   **    //       /**      /**   **     //**  /**/ /**  /**  /**
+/*******   /**    /**  /** //** /**  /**             /**      /**  /**      /**  /** //** /**  /*********
+/**/ ///    /**    /**  /**  //**/**  /**             /**      /**  /**      /**  /**  //**/**  ////////**
+/**        /**    /**  /**   //****  //**    **      /**      /**  //**     **   /**   //****         /**
+/**        //*******   /**    //***   //******       /**      /**   //*******    /**    //***   ********
+//          ///////    //      ///     //////        //       //     ///////     //      ///   ////////
+*/
+
 // Loops through the Vector by value only.
 //  Params: actions func(T)
 //  Returns: None
@@ -82,7 +126,7 @@ func (this *Vector[T]) ForEach(action func(T)) {
 //          stride int
 //          action func(int, T)
 //  Returns: None
-func (this *Vector[T]) For(start int, end int, stride int, action func(int, T)) {
+func (this *Vector[T]) For(start, end, stride int, action func(int, T)) {
 	for i := start; i < end; i += stride {
 		v := this.__array[i]
 		action(i, v)

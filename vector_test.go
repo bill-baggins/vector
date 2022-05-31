@@ -4,11 +4,9 @@ import (
 	"testing"
 )
 
-type T = interface{}
-
 func TestNewVector(t *testing.T) {
-	slice := make([]T, 0)
-	vec := NewVector[T]()
+	slice := make([]any, 0)
+	vec := NewVector[any]()
 	if len(vec.__array) != len(slice) {
 		t.Log("Array not initialized correctly\n")
 		t.Log("Expected: Array length == 0")
