@@ -62,3 +62,63 @@ func TestSet(t *testing.T) {
 		t.Fail()
 	}
 }
+
+type person struct {
+	name string
+	age  int
+}
+
+func TestPopAt(t *testing.T) {
+	// Testing with 'primitive' types.
+	expected := []int{1, 2, 4, 5, 6}
+	myVec := NewVectorFrom(1, 2, 3, 4, 5, 6)
+	myVec.PopAt(2) // should remove the third element.
+	areEqual := true
+	myVec.For(0, myVec.Length, 1, func(i int, v int) {
+		v2 := expected[i]
+		if v2 != v {
+			areEqual = false
+			return
+		}
+	})
+	if !areEqual {
+		t.Log("(Vector).PopAt Method: FAIL")
+		t.Log("Expected: [1, 2, 4, 5, 6]")
+		t.Log("Got: ", myVec.__array)
+		t.Fail()
+	}
+
+	// Garbage collected type test.
+	peopleExpected := []*person{
+		{"Hailey", 19},
+		{"Bob", 23},
+		{"Yumi", 20},
+		{"Mimi", 45},
+	}
+
+	peopleVec := NewVectorFrom(
+		&person{"Hailey", 19},
+		&person{"Bob", 23},
+		&person{"Yumi", 20},
+		&person{"Curtis", 34},
+		&person{"Mimi", 45},
+	)
+
+	_ = peopleVec.PopAt(peopleVec.Length - 1)
+
+	areEqual = true
+	peopleVec.For(0, peopleVec.Length, 1, func(i int, v *person) {
+		v2 := peopleExpected[i]
+		if v.name != v2.name || v.age != v2.age {
+			areEqual = false
+			return
+		}
+	})
+
+	if !areEqual {
+		t.Log("(Vector).PopAt Method: FAIL")
+		t.Log("Expected: ", peopleExpected)
+		t.Log("Got: ", peopleVec.__array)
+		t.Fail()
+	}
+}

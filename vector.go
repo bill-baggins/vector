@@ -14,23 +14,23 @@ type Vector[T any] struct {
 // Creates a new, empty Vector.
 // 	Params: None
 // 	Returns: Vector[T]
-func NewVector[T any]() *Vector[T] {
+func NewVector[T any]() Vector[T] {
 	this := Vector[T]{}
 	this.__array = make([]T, 0)
 	this.Length = 0
 	this.Cap = 0
-	return &this
+	return this
 }
 
 // Creates a new Vector filled with elements provided in the args parameter.
 // 	Params: args ...T
 // 	Returns: Vector[T]
-func NewVectorFrom[T any](args ...T) *Vector[T] {
+func NewVectorFrom[T any](args ...T) Vector[T] {
 	this := Vector[T]{}
 	this.__array = append(this.__array, args...)
 	this.Length = len(this.__array)
 	this.Cap = cap(this.__array)
-	return &this
+	return this
 }
 
 // Returns the element located at the specified index.
