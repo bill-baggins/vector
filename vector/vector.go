@@ -62,7 +62,7 @@ func (this *Vector[T]) Push(element T) {
 
 // Pops an element from the back of the Vector.
 //  Params: None
-//  Returns: element T
+//  Returns: element type T
 func (this *Vector[T]) PopBack() T {
 	element := this.__array[len(this.__array)-1]
 	this.__array = this.__array[:len(this.__array)-1]
