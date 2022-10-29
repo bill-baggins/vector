@@ -5,8 +5,8 @@ import (
 )
 
 func TestNewVector(t *testing.T) {
-	slice := make([]any, 0)
-	vec := NewVector[any]()
+	slice := make([]int, 0)
+	vec := NewVector[int]()
 	if len(vec.__array) != len(slice) {
 		t.Log("Array not initialized correctly\n")
 		t.Log("Expected: Array length == 0")
@@ -104,8 +104,6 @@ func TestPopAt(t *testing.T) {
 		&person{"Mimi", 45},
 	)
 
-	_ = peopleVec.PopAt(peopleVec.Length() - 2)
-	_ = peopleVec.PopAt(peopleVec.Length() - 2)
 	_ = peopleVec.PopAt(peopleVec.Length() - 2)
 
 	areEqual = true

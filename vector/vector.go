@@ -1,6 +1,8 @@
 // The Vector Library. Contains a single, generic struct: Vector[T].
 package vector
 
+import "fmt"
+
 // Vector is a struct that acts as a wrapper for the slice.
 // It contians a lot of helper methods for manipulating the slice.
 // It also reduces the boilerplate seen when manipulating slices in the ways
@@ -67,6 +69,9 @@ func (this *Vector[T]) PopBack() T {
 	return element
 }
 
+// Pops an element at a specified position within the Vector.
+//	Params: None
+// 	Return: T
 func (this *Vector[T]) PopAt(index int) T {
 	value := this.Get(index)
 	copy(this.__array[index:], this.__array[index+1:])
@@ -80,11 +85,35 @@ func (this *Vector[T]) PopAt(index int) T {
 // Takes a slice of the Vector.
 //  Params: start int
 //          end int
-//  Returns: Vector[T]
+//  Return: Vector[T]
 func (this *Vector[T]) Slice(start int, end int) *Vector[T] {
 	slice := Vector[T]{}
 	slice.__array = this.__array[start:end]
 	return &slice
+}
+
+// Returns the underlying array to be used with the range keyword.
+// 	Params: None
+//
+// 	Return: []T
+func (this *Vector[T]) Iter() []T {
+	return this.__array
+}
+
+// Converts the Vector into a string. Assumes each T type inside of
+// the Vector implements the Stringer interface.
+// 	Params: None
+// 	Return: string
+func (this *Vector[Stringer]) String() string {
+	strVec := "["
+	for i, v := range this.Iter() {
+		strVec += fmt.Sprint(v)
+		if i != this.Length()-1 {
+			strVec += ", "
+		}
+	}
+	strVec += "]"
+	return strVec
 }
 
 /*
